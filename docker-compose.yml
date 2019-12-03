@@ -1,0 +1,13 @@
+version: '2'
+
+services:
+  api:
+    restart: always
+    environment:
+      MYSQL_DSN: "root:12345678@tcp(172.17.157.128)/facecheckin?charset=utf8&parseTime=True&loc=Local"
+      REDIS_ADDR: "172.17.157.128:6379"
+      REDIS_DB: ""
+      SESSION_SECRET: "setOnProducation"
+      GIN_MODE: "release"
+    ports:
+      - 3000:3001
