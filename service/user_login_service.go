@@ -10,7 +10,7 @@ import (
 
 // UserLoginService 管理用户登录的服务
 type UserLoginService struct {
-	UserName string `form:"user_name" json:"user_name" binding:"required,min=5,max=30"`
+	PhoneNumber string `form:"phonenumber" json:"phonenumber" binding:"required"`
 	Password string `form:"password" json:"password" binding:"required,min=8,max=40"`
 }
 
@@ -26,12 +26,12 @@ func (service *UserLoginService) setSession(c *gin.Context, user model.User) {
 func (service *UserLoginService) Login(c *gin.Context) serializer.Response {
 	var user model.User
 
-	if err := model.DB.Where("user_name = ?", service.UserName).First(&user).Error; err != nil {
-		return serializer.ParamErr("账号或密码错误", nil)
+	if err := model.DB.Where("phone_number = ?", service.PhoneNumber).First(&user).Error; err != nil {
+		return serializer.ParamErr("手机号或密码错误1", nil)
 	}
 
 	if user.CheckPassword(service.Password) == false {
-		return serializer.ParamErr("账号或密码错误", nil)
+		return serializer.ParamErr("手机号或密码错误2", nil)
 	}
 
 	// 设置session

@@ -7,8 +7,8 @@ import (
 
 // UserRegisterService 管理用户注册服务
 type UserRegisterService struct {
-	PhoneNumber  string `form:"phone_number" json:"phone_number" binding:"required,min=2,max=30"`
-	UserName     string `form:"user_name" json:"user_name" binding:"required,min=5,max=30"`
+	PhoneNumber  string `form:"phonenumber" json:"phonenumber" binding:"required,min=2,max=30"`
+	UserName     string `form:"username" json:"username" binding:"required,min=5,max=30"`
 	Password     string `form:"password" json:"password" binding:"required,min=8,max=40"`
 	Face         string `form:"face" json:"face" binding:"required"`
 	Sex          uint8  `form:"sex" json:"sex" binding:"required"`

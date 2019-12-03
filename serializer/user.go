@@ -4,8 +4,8 @@ import "facecheckin/model"
 
 // User 用户序列化器
 type User struct {
-	PhoneNumber  string `json:"phone_number"`
-	UserName     string `json:"user_name"`
+	PhoneNumber  string `json:"phonenumber"`
+	UserName     string `json:"username"`
 	Sex          uint8  `json:"sex"`
 	Organization string `json:"organization"`
 	Face         string `json:"face"`
