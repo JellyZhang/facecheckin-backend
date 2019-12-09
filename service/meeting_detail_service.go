@@ -3,9 +3,9 @@ package service
 import (
 	"facecheckin/model"
 	"facecheckin/serializer"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
-	"strconv"
 	"strings"
 )
 
@@ -24,13 +24,17 @@ func (service *MeetingDetialService) GetDetail(c *gin.Context) serializer.Respon
 	}
 
 	// 将memberlist的1,2,3形式切割并转化为[]user
+	fmt.Println("memberlist = " + meeting.MemberList)
 	members := strings.Split(meeting.MemberList,",")
+	for _,v := range members {
+		fmt.Println(v)
+	}
+	members =  append(members[0:1],members[0:]...)
+	members[0] = meeting.Owner
 	for _, member := range members{
 		var tempUser model.User
-		if uid, err := strconv.Atoi(member); err == nil {
-			if err := model.DB.Where("id = ?", uid).First(&member).Error; err!=nil{
-				userList = append(userList, tempUser)
-			}
+		if err := model.DB.Where("phone_number = ?", member).First(&tempUser).Error; err ==nil{
+			userList = append(userList, tempUser)
 		}
 	}
 

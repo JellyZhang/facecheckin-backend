@@ -18,7 +18,7 @@ type UserRegisterService struct {
 // valid 验证表单
 func (service *UserRegisterService) valid() *serializer.Response {
 	count := 0
-	model.DB.Model(&model.User{}).Where("phonenumber = ?", service.PhoneNumber).Count(&count)
+	model.DB.Model(&model.User{}).Where("phone_number = ?", service.PhoneNumber).Count(&count)
 	if count > 0 {
 		return &serializer.Response{
 			Code: 40001,
