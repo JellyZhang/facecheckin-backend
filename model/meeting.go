@@ -10,9 +10,10 @@ type Meeting struct{
 	LocationLatitude string
 	LocationLongitude string
 	Describe string
-	CheckType uint8
+	CheckType string
 	CheckRule string
 	TimeStart string
 	TimeEnd string
-	MemberList []User
+	Owner string
+	MemberList string
 }

@@ -69,3 +69,12 @@ func ParamErr(msg string, err error) Response {
 	}
 	return Err(CodeParamErr, msg, err)
 }
+
+func ParamGood(msg string) Response{
+	return  Response{
+		Code:  0,
+		Msg:   msg,
+		Error: "",
+	}
+
+}

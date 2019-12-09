@@ -4,7 +4,6 @@ import (
 	"facecheckin/api"
 	"facecheckin/middleware"
 	"os"
-
 	"github.com/gin-gonic/gin"
 )
 
@@ -31,6 +30,11 @@ func NewRouter() *gin.Engine {
 		//meeting detail
 		v1.GET("meeting/detail", api.MeetingDetial)
 
+		//meeting add
+		v1.POST("meeting/add", api.MeetingAdd)
+
+		//meeting update
+		v1.POST("meeting/update", api.MeetingUpdate)
 
 		// 需要登录保护的
 		//auth := v1.Group("")

@@ -15,6 +15,7 @@ type User struct {
 	Type           uint8
 	Face           string `gorm:"size:10000"`
 	Organization   string
+	OwnedMeeting   string
 }
 
 const (
