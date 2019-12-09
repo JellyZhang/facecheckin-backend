@@ -30,6 +30,9 @@ func NewRouter() *gin.Engine {
 		// user update
 		v1.POST("user/update", api.UserUpdate)
 
+		// user info
+		v1.GET("user/info", api.UserInfo)
+
 		//meeting detail
 		v1.GET("meeting/detail", api.MeetingDetial)
 

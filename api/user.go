@@ -58,3 +58,15 @@ func UserUpdate(c *gin.Context){
 		c.JSON(200, ErrorResponse(err))
 	}
 }
+
+// UserInfo 用户信息
+func UserInfo(c *gin.Context){
+	var service service.UserInfoService
+	if err := c.ShouldBind(&service); err == nil{
+		res := service.Info(c)
+		c.JSON(200, res)
+	} else{
+		c.JSON(200, ErrorResponse(err))
+	}
+
+}
