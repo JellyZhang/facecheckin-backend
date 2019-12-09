@@ -3,10 +3,11 @@ package service
 import (
 	"facecheckin/model"
 	"facecheckin/serializer"
+	"github.com/gin-gonic/gin"
 )
 
-// UserRegisterService 管理用户注册服务
-type UserRegisterService struct {
+// UserUpdateService 管理用户信息更新服务
+type UserUpdateService struct {
 	PhoneNumber  string `form:"phonenumber" json:"phonenumber" binding:"required,min=2,max=30"`
 	UserName     string `form:"username" json:"username" binding:"required,min=5,max=30"`
 	Password     string `form:"password" json:"password" binding:"required,min=8,max=40"`
@@ -16,18 +17,9 @@ type UserRegisterService struct {
 }
 
 // valid 验证表单
-func (service *UserRegisterService) valid() *serializer.Response {
+func (service *UserUpdateService) valid() *serializer.Response {
 	count := 0
-	model.DB.Model(&model.User{}).Where("phone_number = ?", service.PhoneNumber).Count(&count)
-	if count > 0 {
-		return &serializer.Response{
-			Code: 40001,
-			Msg:  "手机号已注册",
-		}
-	}
-
-	count = 0
-	model.DB.Model(&model.User{}).Where("user_name = ?", service.UserName).Count(&count)
+	model.DB.Model(&model.User{}).Where("user_name = ? AND phone_number != ?", service.UserName, service.PhoneNumber).Count(&count)
 	if count > 0 {
 		return &serializer.Response{
 			Code: 40001,
@@ -42,25 +34,27 @@ func (service *UserRegisterService) valid() *serializer.Response {
 		}
 	}
 
-
 	return nil
 }
 
-// Register 用户注册
-func (service *UserRegisterService) Register() serializer.Response {
-	user := model.User{
-		PhoneNumber:  service.PhoneNumber,
-		UserName:     service.UserName,
-		Face:         service.Face,
-		Sex:          service.Sex,
-		Organization: service.Organization,
-	}
-
+// Update 用户信息更新
+func (service *UserUpdateService) Update(c *gin.Context) serializer.Response {
 	// 表单验证
 	if err := service.valid(); err != nil {
 		return *err
 	}
 
+	// 查找用户
+	var user model.User
+	if err := model.DB.Where("phone_number = ?", service.PhoneNumber).First(&user).Error; err != nil {
+		return serializer.ParamErr("未找到用户",err)
+	}
+
+	// 更新信息
+	user.UserName = service.UserName
+	user.Organization = service.Organization
+	user.Sex = service.Sex
+	user.Face = service.Face
 	// 加密密码
 	if err := user.SetPassword(service.Password); err != nil {
 		return serializer.Err(
@@ -70,9 +64,9 @@ func (service *UserRegisterService) Register() serializer.Response {
 		)
 	}
 
-	// 创建用户
-	if err := model.DB.Create(&user).Error; err != nil {
-		return serializer.ParamErr("注册失败", err)
+	// 保存信息
+	if err := model.DB.Save(&user).Error; err != nil{
+		return serializer.ParamErr("保存信息失败",err)
 	}
 
 	return serializer.BuildUserResponse(user)

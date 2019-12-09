@@ -27,6 +27,9 @@ func NewRouter() *gin.Engine {
 		//用户登录
 		v1.POST("user/login", api.UserLogin)
 
+		// user update
+		v1.POST("user/update", api.UserUpdate)
+
 		//meeting detail
 		v1.GET("meeting/detail", api.MeetingDetial)
 

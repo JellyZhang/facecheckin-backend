@@ -39,7 +39,9 @@ func (service MeetingUpdateService) UpdateMeeting(c *gin.Context) serializer.Res
 	meeting.LocationLatitude = service.Latitude
 	meeting.Describe = service.Describe
 
-	model.DB.Save(&meeting)
+	if err := model.DB.Save(&meeting).Error; err != nil{
+		return serializer.ParamErr("更新失败",err)
+	}
 	detailService := MeetingDetialService{
 		Meetingid: service.MeetingId,
 	}
