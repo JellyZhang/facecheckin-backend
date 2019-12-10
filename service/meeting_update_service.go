@@ -4,11 +4,9 @@ import (
 	"facecheckin/model"
 	"facecheckin/serializer"
 	"github.com/gin-gonic/gin"
-	"github.com/jinzhu/gorm"
 )
 
 type MeetingUpdateService struct {
-	gorm.Model
 	MeetingId string `form:"mid" json:"mid" binding:"required"`
 	MeetingName string `form:"mname" json:"mname" binding:"required"`
 	MeetingCover string `form:"mcover" json:"mcover" binding:"required"`

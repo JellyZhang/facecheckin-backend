@@ -13,7 +13,6 @@ import (
 )
 
 type MeetingAddService struct {
-	gorm.Model
 	UserId string `form:"uid" json:"uid" binding:"required"`
 	MeetingName string `form:"mname" json:"mname" binding:"required"`
 	MeetingCover string `form:"mcover" json:"mcover" binding:"required"`

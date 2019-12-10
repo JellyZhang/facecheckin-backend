@@ -5,12 +5,10 @@ import (
 	"facecheckin/serializer"
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/jinzhu/gorm"
 	"strings"
 )
 
 type MeetingDetialService struct{
-	gorm.Model
 	Meetingid string `form:"meetingid" json:"meetingid" binding:"required"`
 }
 
