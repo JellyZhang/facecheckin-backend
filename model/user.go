@@ -16,6 +16,7 @@ type User struct {
 	Face           string `gorm:"size:10000"`
 	Organization   string
 	OwnedMeeting   string
+	JoinedMeeting string
 }
 
 const (
