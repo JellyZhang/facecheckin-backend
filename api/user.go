@@ -49,23 +49,23 @@ func UserLogout(c *gin.Context) {
 }
 
 // UserUpdate 用户更新
-func UserUpdate(c *gin.Context){
+func UserUpdate(c *gin.Context) {
 	var service service.UserUpdateService
-	if err := c.ShouldBind(&service); err == nil{
+	if err := c.ShouldBind(&service); err == nil {
 		res := service.Update(c)
 		c.JSON(200, res)
-	} else{
+	} else {
 		c.JSON(200, ErrorResponse(err))
 	}
 }
 
 // UserInfo 用户信息
-func UserInfo(c *gin.Context){
+func UserInfo(c *gin.Context) {
 	var service service.UserInfoService
-	if err := c.ShouldBind(&service); err == nil{
+	if err := c.ShouldBind(&service); err == nil {
 		res := service.Info(c)
 		c.JSON(200, res)
-	} else{
+	} else {
 		c.JSON(200, ErrorResponse(err))
 	}
 

@@ -1,25 +1,26 @@
 package model
 
 type Checktime struct {
-	CheckType string `json:"checktype"`
-	CheckRule string `json:"checkrule"`
+	CheckType string      `json:"checktype"`
+	CheckRule string      `json:"checkrule"`
 	TimeSpace interface{} `json:"timespace"`
 }
 
 type TimeSpace struct {
 	TimeStart string `json:"start"`
-	TimeEnd string `json:"end"`
+	TimeEnd   string `json:"end"`
 }
 type MeetingLocation struct {
 	Longitude string `json:"longitude"`
 	Latitude  string `json:"latitude"`
 	Describe  string `json:"describe"`
 }
-type MeetingDetail struct{
-	MeetingCover string `json:"mcover"`
-	MeetingName string `json:"mname"`
-	Mid string `json:"mid"`
+type MeetingDetail struct {
+	MeetingCover    string      `json:"mcover"`
+	MeetingName     string      `json:"mname"`
+	Mid             string      `json:"mid"`
 	MeetingLocation interface{} `json:"location"`
-	CheckTime interface{} `json:"checktime"`
-	MemberList []User
+	CheckTime       interface{} `json:"checktime"`
+	MemberList      []User
+	Owner           User
 }

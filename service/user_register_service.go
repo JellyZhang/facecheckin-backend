@@ -37,11 +37,10 @@ func (service *UserRegisterService) valid() *serializer.Response {
 
 	if service.Sex != 1 && service.Sex != 2 {
 		return &serializer.Response{
-			Code:  40002,
-			Msg:   "性别只能为1或2",
+			Code: 40002,
+			Msg:  "性别只能为1或2",
 		}
 	}
-
 
 	return nil
 }

@@ -23,4 +23,3 @@ func GetTempPic() {
 	// ... The base64 image can be used as a data URI in a browser.
 	fmt.Println("ENCODED: " + encoded)
 }
-

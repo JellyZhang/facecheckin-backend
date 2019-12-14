@@ -13,33 +13,33 @@ import (
 )
 
 type MeetingAddService struct {
-	UserId string `form:"uid" json:"uid" binding:"required"`
-	MeetingName string `form:"mname" json:"mname" binding:"required"`
+	UserId       string `form:"uid" json:"uid" binding:"required"`
+	MeetingName  string `form:"mname" json:"mname" binding:"required"`
 	MeetingCover string `form:"mcover" json:"mcover" binding:"required"`
-	CheckType string `form:"check_type" json:"check_type" binding:"required"`
-	CheckRule string `form:"check_rule" json:"check_rule" binding:"required"`
-	TimeStart string `form:"check_time_start" json:"check_time_start" binding:"required"`
-	TimeEnd string `form:"check_time_end" json:"check_time_end" binding:"required"`
-	Longitude string `form:"longitude" json:"longitude" binding:"required"`
-	Latitude string `form:"latitude" json:"latitude" binding:"required"`
-	Describe string `form:"describe" json:"describe" binding:"required"`
+	CheckType    string `form:"check_type" json:"check_type" binding:"required"`
+	CheckRule    string `form:"check_rule" json:"check_rule" binding:"required"`
+	TimeStart    string `form:"check_time_start" json:"check_time_start" binding:"required"`
+	TimeEnd      string `form:"check_time_end" json:"check_time_end" binding:"required"`
+	Longitude    string `form:"longitude" json:"longitude" binding:"required"`
+	Latitude     string `form:"latitude" json:"latitude" binding:"required"`
+	Describe     string `form:"describe" json:"describe" binding:"required"`
 }
+
 const lenOfMid = 6
 
 //  get available meeting id
-func getAvailaleMid() string{
+func getAvailaleMid() string {
 	rand.Seed(time.Now().Unix())
 	limit := int(math.Pow10(lenOfMid))
 	//var meeting model.Meeting
-	for i:=1; i < limit
-	{
+	for i := 1; i < limit; {
 		temp := strconv.Itoa(rand.Intn(limit))
 		for len(temp) < lenOfMid {
 			temp = "0" + temp
 		}
 		count := 0
 		model.DB.Model(&model.Meeting{}).Where("mid = ?", temp).Count(&count)
-		if count == 0{
+		if count == 0 {
 			return temp
 		}
 	}
@@ -48,14 +48,14 @@ func getAvailaleMid() string{
 
 // valid 验证表单
 func (service *MeetingAddService) valid() *serializer.Response {
-	var val1,val2 int
-	val1,err := strconv.Atoi(service.TimeStart)
+	var val1, val2 int
+	val1, err := strconv.Atoi(service.TimeStart)
 	if err != nil {
 		rtn := serializer.ParamErr("Time Start 非数字", err)
 		return &rtn
 	}
-	val2,err = strconv.Atoi(service.TimeEnd)
-	if err != nil{
+	val2, err = strconv.Atoi(service.TimeEnd)
+	if err != nil {
 		rtn := serializer.ParamErr("Time End 非数字", err)
 		return &rtn
 	}
@@ -64,13 +64,12 @@ func (service *MeetingAddService) valid() *serializer.Response {
 		return &rtn
 	}
 	var owner model.User
-	if err := model.DB.Where("phone_number = ?", service.UserId).First(&owner).Error; err != nil{
-		rtn := serializer.ParamErr("主持人未找到",err)
+	if err := model.DB.Where("phone_number = ?", service.UserId).First(&owner).Error; err != nil {
+		rtn := serializer.ParamErr("主持人未找到", err)
 		return &rtn
 	}
 	return nil
 }
-
 
 func (service MeetingAddService) AddMeeting(c *gin.Context) serializer.Response {
 
@@ -83,7 +82,7 @@ func (service MeetingAddService) AddMeeting(c *gin.Context) serializer.Response 
 	fmt.Println("寻找可用mid")
 	newMid := getAvailaleMid()
 	if len(newMid) > lenOfMid {
-		return serializer.ParamErr("可用的Mid未找到",nil)
+		return serializer.ParamErr("可用的Mid未找到", nil)
 	}
 	fmt.Println(newMid)
 
@@ -100,26 +99,26 @@ func (service MeetingAddService) AddMeeting(c *gin.Context) serializer.Response 
 		CheckRule:         service.CheckRule,
 		TimeStart:         service.TimeStart,
 		TimeEnd:           service.TimeEnd,
-		Owner:             service.UserId,
-		MemberList:        "",
+		OwnerId:             service.UserId,
+	}
+	newrelation := model.Relation{
+		UserId:    service.UserId,
+		MeetingId: newMid,
+		Type:      1,
 	}
 	if ok := model.DB.NewRecord(newMeeting); ok {
-		if err := model.DB.Create(&newMeeting).Error; err!=nil{
-			return serializer.ParamErr("添加会议失败1",err)
+		if err := model.DB.Create(&newMeeting).Error; err != nil {
+			return serializer.ParamErr("添加会议失败1", err)
 		}
-		var owner model.User
-		if err := model.DB.Where("phone_number = ?", service.UserId).First(&owner).Error; err != nil{
-			return serializer.ParamErr("主持人未找到",err)
-		} else{
-			if len(owner.OwnedMeeting) == 0 {
-				owner.OwnedMeeting = newMid
-			} else{
-				owner.OwnedMeeting += "," + newMid
-			}
-			model.DB.Save(&owner)
-		}
-		return serializer.ParamGood("添加会议成功, meeting id = " + newMid)
 	} else {
-		return serializer.ParamErr("添加会议失败 : 已存在记录",nil)
+		return serializer.ParamErr("添加会议失败 : 已存在记录", nil)
 	}
+	if ok := model.DB.NewRecord(newrelation); ok {
+		if err := model.DB.Create(&newrelation).Error; err != nil {
+			return serializer.ParamErr("添加owner失败1", err)
+		}
+	} else {
+		return serializer.ParamErr("添加owner失败 : 已存在记录", nil)
+	}
+	return serializer.ParamGood("添加会议成功, meeting id = " + newMid)
 }

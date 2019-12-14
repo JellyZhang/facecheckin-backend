@@ -29,8 +29,8 @@ func (service *UserUpdateService) valid() *serializer.Response {
 
 	if service.Sex != 1 && service.Sex != 2 {
 		return &serializer.Response{
-			Code:  40002,
-			Msg:   "性别只能为1或2",
+			Code: 40002,
+			Msg:  "性别只能为1或2",
 		}
 	}
 
@@ -47,7 +47,7 @@ func (service *UserUpdateService) Update(c *gin.Context) serializer.Response {
 	// 查找用户
 	var user model.User
 	if err := model.DB.Where("phone_number = ?", service.PhoneNumber).First(&user).Error; err != nil {
-		return serializer.ParamErr("未找到用户",err)
+		return serializer.ParamErr("未找到用户", err)
 	}
 
 	// 更新信息
@@ -65,8 +65,8 @@ func (service *UserUpdateService) Update(c *gin.Context) serializer.Response {
 	}
 
 	// 保存信息
-	if err := model.DB.Save(&user).Error; err != nil{
-		return serializer.ParamErr("保存信息失败",err)
+	if err := model.DB.Save(&user).Error; err != nil {
+		return serializer.ParamErr("保存信息失败", err)
 	}
 
 	return serializer.BuildUserResponse(user)

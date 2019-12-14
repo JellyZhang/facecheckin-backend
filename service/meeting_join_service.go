@@ -4,15 +4,14 @@ import (
 	"facecheckin/model"
 	"facecheckin/serializer"
 	"github.com/gin-gonic/gin"
-	"strings"
 )
 
-type MeetingJoinService struct{
+type MeetingJoinService struct {
 	MeetingId string `form:"meetingid" json:"meetingid" binding:"required"`
-	UserId string `form:"userid" json:"userid" binding:"required"`
+	UserId    string `form:"userid" json:"userid" binding:"required"`
 }
 
-func (service *MeetingJoinService) valid() *serializer.Response{
+func (service *MeetingJoinService) valid() *serializer.Response {
 	count := 0
 	model.DB.Model(&model.User{}).Where("phone_number = ?", service.UserId).Count(&count)
 	if count == 0 {
@@ -24,38 +23,37 @@ func (service *MeetingJoinService) valid() *serializer.Response{
 
 }
 
-func (service *MeetingJoinService) JoinMeeting(c *gin.Context) serializer.Response{
-	if err := service.valid(); err != nil{
+func (service *MeetingJoinService) JoinMeeting(c *gin.Context) serializer.Response {
+	if err := service.valid(); err != nil {
 		return *err
 	}
 
 	var meeting model.Meeting
 
 	// 查询meeting
-	if err:= model.DB.Where("mid = ?", service.MeetingId).First(&meeting).Error; err!= nil{
-		return serializer.ParamErr("Meeting Not Found",nil)
+	if err := model.DB.Where("mid = ?", service.MeetingId).First(&meeting).Error; err != nil {
+		return serializer.ParamErr("Meeting Not Found", nil)
 	}
 
 	// check if exist
-	members := strings.Split(meeting.MemberList,",")
-	for _,v := range members {
-		if v == service.UserId {
-			return serializer.Err(40003, "用户已加入该meeting", nil)
-		}
+	count := 0
+	model.DB.Model(&model.Relation{}).Where("user_id = ? AND meeting_id = ?", service.UserId, service.MeetingId).Count(&count)
+	if count > 0 {
+		return serializer.ParamErr("user already in this meeting !", nil)
 	}
 
 	// add member to memberlist
-	if len(meeting.MemberList) == 0 {
-		meeting.MemberList = service.UserId
-	} else{
-		meeting.MemberList += "," + service.UserId
+	relation := model.Relation{
+		UserId:    service.UserId,
+		MeetingId: service.MeetingId,
+		Type:      0,
 	}
-	if err := model.DB.Save(&meeting).Error; err != nil{
+	if err := model.DB.Save(&relation).Error; err != nil {
 		return serializer.Err(40002, "保存失败", err)
 	}
 
 	detailService := MeetingDetialService{
-		Meetingid:service.MeetingId,
+		Meetingid: service.MeetingId,
 	}
 	return detailService.GetDetail(c)
 }

@@ -7,22 +7,22 @@ import (
 )
 
 type MeetingUpdateService struct {
-	MeetingId string `form:"mid" json:"mid" binding:"required"`
-	MeetingName string `form:"mname" json:"mname" binding:"required"`
+	MeetingId    string `form:"mid" json:"mid" binding:"required"`
+	MeetingName  string `form:"mname" json:"mname" binding:"required"`
 	MeetingCover string `form:"mcover" json:"mcover" binding:"required"`
-	CheckType string `form:"check_type" json:"check_type" binding:"required"`
-	CheckRule string `form:"check_rule" json:"check_rule" binding:"required"`
-	TimeStart string `form:"check_time_start" json:"check_time_start" binding:"required"`
-	TimeEnd string `form:"check_time_end" json:"check_time_end" binding:"required"`
-	Longitude string `form:"longitude" json:"longitude" binding:"required"`
-	Latitude string `form:"latitude" json:"latitude" binding:"required"`
-	Describe string `form:"describe" json:"describe" binding:"required"`
+	CheckType    string `form:"check_type" json:"check_type" binding:"required"`
+	CheckRule    string `form:"check_rule" json:"check_rule" binding:"required"`
+	TimeStart    string `form:"check_time_start" json:"check_time_start" binding:"required"`
+	TimeEnd      string `form:"check_time_end" json:"check_time_end" binding:"required"`
+	Longitude    string `form:"longitude" json:"longitude" binding:"required"`
+	Latitude     string `form:"latitude" json:"latitude" binding:"required"`
+	Describe     string `form:"describe" json:"describe" binding:"required"`
 }
 
 func (service MeetingUpdateService) UpdateMeeting(c *gin.Context) serializer.Response {
 	// fetch old meeting by mid
 	var meeting model.Meeting
-	if err := model.DB.Where("mid = ?", service.MeetingId).First(&meeting).Error; err != nil{
+	if err := model.DB.Where("mid = ?", service.MeetingId).First(&meeting).Error; err != nil {
 		return serializer.ParamErr("未找到相应meeting", err)
 	}
 
@@ -37,12 +37,11 @@ func (service MeetingUpdateService) UpdateMeeting(c *gin.Context) serializer.Res
 	meeting.LocationLatitude = service.Latitude
 	meeting.Describe = service.Describe
 
-	if err := model.DB.Save(&meeting).Error; err != nil{
-		return serializer.ParamErr("更新失败",err)
+	if err := model.DB.Save(&meeting).Error; err != nil {
+		return serializer.ParamErr("更新失败", err)
 	}
 	detailService := MeetingDetialService{
 		Meetingid: service.MeetingId,
 	}
 	return detailService.GetDetail(c)
 }
-

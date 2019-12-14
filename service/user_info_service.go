@@ -11,7 +11,6 @@ type UserInfoService struct {
 	PhoneNumber string `form:"phonenumber" json:"phonenumber" binding:"required"`
 }
 
-
 // UserInfo 用户信息
 func (service *UserInfoService) Info(c *gin.Context) serializer.Response {
 	var user model.User

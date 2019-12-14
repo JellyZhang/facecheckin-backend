@@ -3,8 +3,8 @@ package server
 import (
 	"facecheckin/api"
 	"facecheckin/middleware"
-	"os"
 	"github.com/gin-gonic/gin"
+	"os"
 )
 
 // NewRouter 路由配置
