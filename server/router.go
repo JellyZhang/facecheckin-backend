@@ -47,6 +47,9 @@ func NewRouter() *gin.Engine {
 
 		//meeting leave
 		v1.POST("meeting/leave", api.MeetingLeave)
+
+		// chech add
+		v1.POST("check/add", api.CheckAdd)
 		// 需要登录保护的
 		//auth := v1.Group("")
 		//auth.Use(middleware.AuthRequired())

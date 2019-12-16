@@ -7,4 +7,5 @@ func migration() {
 	DB.AutoMigrate(&User{})
 	DB.AutoMigrate(&Meeting{})
 	DB.AutoMigrate(&Relation{})
+	DB.AutoMigrate(&Check{})
 }
