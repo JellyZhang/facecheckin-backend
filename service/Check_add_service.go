@@ -39,6 +39,12 @@ func (service *CheckAddService) valid() *serializer.Response {
 			return &rtn
 		}
 	}
+	count = 0
+	model.DB.Model(&model.Check{}).Where("created_at >= ? AND created_at < ? AND check_type = 2", time.Now().Format("2006-01-02"), time.Now()).Count(&count)
+	if count > 0 {
+		rtn := serializer.ParamErr("今天已签退", nil)
+		return &rtn
+	}
 
 	return nil
 }
