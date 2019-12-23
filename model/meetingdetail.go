@@ -7,8 +7,8 @@ type Checktime struct {
 }
 
 type TimeSpace struct {
-	TimeStart string `json:"start"`
-	TimeEnd   string `json:"end"`
+	TimeStart int `json:"start"`
+	TimeEnd   int `json:"end"`
 }
 type MeetingLocation struct {
 	Longitude string `json:"longitude"`

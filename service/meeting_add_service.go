@@ -18,8 +18,8 @@ type MeetingAddService struct {
 	MeetingCover string `form:"mcover" json:"mcover" binding:"required"`
 	CheckType    string `form:"check_type" json:"check_type" binding:"required"`
 	CheckRule    string `form:"check_rule" json:"check_rule" binding:"required"`
-	TimeStart    string `form:"check_time_start" json:"check_time_start" binding:"required"`
-	TimeEnd      string `form:"check_time_end" json:"check_time_end" binding:"required"`
+	TimeStart    int `form:"check_time_start" json:"check_time_start" binding:"required"`
+	TimeEnd      int `form:"check_time_end" json:"check_time_end" binding:"required"`
 	Longitude    string `form:"longitude" json:"longitude" binding:"required"`
 	Latitude     string `form:"latitude" json:"latitude" binding:"required"`
 	Describe     string `form:"describe" json:"describe" binding:"required"`
@@ -48,18 +48,7 @@ func getAvailaleMid() string {
 
 // valid 验证表单
 func (service *MeetingAddService) valid() *serializer.Response {
-	var val1, val2 int
-	val1, err := strconv.Atoi(service.TimeStart)
-	if err != nil {
-		rtn := serializer.ParamErr("Time Start 非数字", err)
-		return &rtn
-	}
-	val2, err = strconv.Atoi(service.TimeEnd)
-	if err != nil {
-		rtn := serializer.ParamErr("Time End 非数字", err)
-		return &rtn
-	}
-	if val1 < 0 || val1 > 1440 || val2 < 0 || val2 > 1440 || val1 > val2 {
+	if service.TimeStart < 0 || service.TimeStart > 1440 || service.TimeEnd < 0 || service.TimeEnd > 1440 || service.TimeStart > service.TimeEnd {
 		rtn := serializer.ParamErr("时间范围不符合规范", nil)
 		return &rtn
 	}

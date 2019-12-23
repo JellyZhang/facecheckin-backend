@@ -3,6 +3,7 @@ package service
 import (
 	"facecheckin/model"
 	"facecheckin/serializer"
+	"fmt"
 	"github.com/gin-gonic/gin"
 )
 
@@ -37,6 +38,7 @@ func (service *MeetingDetialService) GetDetail(c *gin.Context) serializer.Respon
 	if err:= model.DB.Where("phone_number = ?", meeting.OwnerId).First(&owner).Error; err!=nil{
 		return serializer.ParamErr("cant find owner",err)
 	}
+	fmt.Println(owner.ID)
 
 	// build meetingDetail
 	detail := model.MeetingDetail{

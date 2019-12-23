@@ -12,7 +12,7 @@ type Meeting struct {
 	Describe          string
 	CheckType         string
 	CheckRule         string
-	TimeStart         string
-	TimeEnd           string
+	TimeStart         int
+	TimeEnd           int
 	OwnerId           string
 }

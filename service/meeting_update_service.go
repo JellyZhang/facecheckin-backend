@@ -12,8 +12,8 @@ type MeetingUpdateService struct {
 	MeetingCover string `form:"mcover" json:"mcover" binding:"required"`
 	CheckType    string `form:"check_type" json:"check_type" binding:"required"`
 	CheckRule    string `form:"check_rule" json:"check_rule" binding:"required"`
-	TimeStart    string `form:"check_time_start" json:"check_time_start" binding:"required"`
-	TimeEnd      string `form:"check_time_end" json:"check_time_end" binding:"required"`
+	TimeStart    int `form:"check_time_start" json:"check_time_start" binding:"required"`
+	TimeEnd      int `form:"check_time_end" json:"check_time_end" binding:"required"`
 	Longitude    string `form:"longitude" json:"longitude" binding:"required"`
 	Latitude     string `form:"latitude" json:"latitude" binding:"required"`
 	Describe     string `form:"describe" json:"describe" binding:"required"`

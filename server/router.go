@@ -50,6 +50,9 @@ func NewRouter() *gin.Engine {
 
 		// chech add
 		v1.POST("check/add", api.CheckAdd)
+
+		// check statistic
+		v1.POST("check/statistic", api.CheckStatistic)
 		// 需要登录保护的
 		//auth := v1.Group("")
 		//auth.Use(middleware.AuthRequired())

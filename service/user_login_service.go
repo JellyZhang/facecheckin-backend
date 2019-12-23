@@ -11,7 +11,7 @@ import (
 // UserLoginService 管理用户登录的服务
 type UserLoginService struct {
 	PhoneNumber string `form:"phonenumber" json:"phonenumber" binding:"required"`
-	Password    string `form:"password" json:"password" binding:"required,min=8,max=40"`
+	Password    string `form:"password" json:"password" binding:"required"`
 }
 
 // setSession 设置session
