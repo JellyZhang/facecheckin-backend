@@ -7,7 +7,7 @@ import (
 // 签到记录模型
 type Check struct {
 	gorm.Model
-	UserId string
+	UserId    string
 	MeetingId string
 	CheckType int
 }

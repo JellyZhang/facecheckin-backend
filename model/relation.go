@@ -4,7 +4,7 @@ import "github.com/jinzhu/gorm"
 
 type Relation struct {
 	gorm.Model
-	UserId string
-	MeetingId   string
-	Type        int
+	UserId    string
+	MeetingId string
+	Type      int
 }

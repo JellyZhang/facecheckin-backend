@@ -8,27 +8,27 @@ import (
 )
 
 type CheckAddService struct {
-	UserId       string `form:"uid" json:"uid" binding:"required"`
-	MeetingId    string `form:"mid" json:"mid" binding:"required"`
-	CheckType    int `form:"type" json:"type" binding:"required"`
+	UserId    string `form:"uid" json:"uid" binding:"required"`
+	MeetingId string `form:"mid" json:"mid" binding:"required"`
+	CheckType int    `form:"type" json:"type" binding:"required"`
 }
+
 // valid 验证表单
 func (service *CheckAddService) valid() *serializer.Response {
 	count := 0
 	if model.DB.Model(&model.User{}).Where("phone_number = ?", service.UserId).Count(&count); count == 0 {
-		rtn := serializer.ParamErr("用户未找到",nil)
+		rtn := serializer.ParamErr("用户未找到", nil)
 		return &rtn
 	}
 	count = 0
 	if model.DB.Model(&model.Meeting{}).Where("mid = ?", service.MeetingId).Count(&count); count == 0 {
-		rtn := serializer.ParamErr("meeting未找到",nil)
+		rtn := serializer.ParamErr("meeting未找到", nil)
 		return &rtn
 	}
 	if service.CheckType != 2 && service.CheckType != 1 {
-		rtn := serializer.ParamErr("check type 必须为0或1",nil)
+		rtn := serializer.ParamErr("check type 必须为0或1", nil)
 		return &rtn
 	}
-
 
 	// 	签退时检查是否已签到
 	if service.CheckType == 2 {
@@ -70,18 +70,18 @@ func (service *CheckAddService) AddCheck(c *gin.Context) serializer.Response {
 	var whichtype string
 	if service.CheckType == 1 {
 		whichtype = "签到"
-	} else{
+	} else {
 		whichtype = "签退"
 	}
 
 	if ok := model.DB.NewRecord(newcheck); ok {
 		if err := model.DB.Create(&newcheck).Error; err != nil {
-			return serializer.ParamErr("添加"+whichtype + "失败1", err)
+			return serializer.ParamErr("添加"+whichtype+"失败1", err)
 		}
 	} else {
 		return serializer.ParamErr("添加"+whichtype+"失败 : 已存在记录", nil)
 	}
 
-	return serializer.ParamGood("添加"+whichtype+"成功")
+	return serializer.ParamGood("添加" + whichtype + "成功")
 
 }

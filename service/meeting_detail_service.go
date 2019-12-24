@@ -9,6 +9,7 @@ import (
 type MeetingDetialService struct {
 	Meetingid string `form:"meetingid" json:"meetingid" binding:"required"`
 }
+
 func (service *MeetingDetialService) GetDetail(c *gin.Context) serializer.Response {
 	var meeting model.Meeting
 	var userList []model.User
@@ -33,8 +34,8 @@ func (service *MeetingDetialService) GetDetail(c *gin.Context) serializer.Respon
 
 	// find owner
 	var owner model.User
-	if err:= model.DB.Where("phone_number = ?", meeting.OwnerId).First(&owner).Error; err!=nil{
-		return serializer.ParamErr("cant find owner",err)
+	if err := model.DB.Where("phone_number = ?", meeting.OwnerId).First(&owner).Error; err != nil {
+		return serializer.ParamErr("cant find owner", err)
 	}
 
 	// build meetingDetail

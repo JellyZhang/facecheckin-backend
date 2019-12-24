@@ -17,8 +17,8 @@ type MeetingAddService struct {
 	MeetingName  string `form:"mname" json:"mname" binding:"required"`
 	MeetingCover string `form:"mcover" json:"mcover" binding:"required"`
 	CheckRule    string `form:"check_rule" json:"check_rule" binding:"required"`
-	TimeStart    int `form:"check_time_start" json:"check_time_start" binding:"required"`
-	TimeEnd      int `form:"check_time_end" json:"check_time_end" binding:"required"`
+	TimeStart    int    `form:"check_time_start" json:"check_time_start" binding:"required"`
+	TimeEnd      int    `form:"check_time_end" json:"check_time_end" binding:"required"`
 	Longitude    string `form:"longitude" json:"longitude" binding:"required"`
 	Latitude     string `form:"latitude" json:"latitude" binding:"required"`
 	Describe     string `form:"describe" json:"describe" binding:"required"`
@@ -86,7 +86,7 @@ func (service MeetingAddService) AddMeeting(c *gin.Context) serializer.Response 
 		CheckRule:         service.CheckRule,
 		TimeStart:         service.TimeStart,
 		TimeEnd:           service.TimeEnd,
-		OwnerId:             service.UserId,
+		OwnerId:           service.UserId,
 	}
 	newrelation := model.Relation{
 		UserId:    service.UserId,

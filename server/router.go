@@ -53,6 +53,9 @@ func NewRouter() *gin.Engine {
 
 		// check statistic
 		v1.POST("check/statistic", api.CheckStatistic)
+
+		// get face score
+		v1.POST("check/face", api.CheckFace)
 		// 需要登录保护的
 		//auth := v1.Group("")
 		//auth.Use(middleware.AuthRequired())

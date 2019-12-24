@@ -38,11 +38,11 @@ func (service *MeetingLeaveService) LeaveMeeting(c *gin.Context) serializer.Resp
 	// check user if in list
 	count := 0
 	model.DB.Model(&model.Relation{}).Where("user_id = ? AND meeting_id = ?", service.UserId, service.MeetingId).Count(&count)
-	if count == 0{
+	if count == 0 {
 		return serializer.ParamErr("user not in this meeting !", nil)
 	}
 
-	if err := model.DB.Where("user_id = ? AND meeting_id = ?", service.UserId, service.MeetingId).Delete(&model.Relation{}).Error; err!= nil{
+	if err := model.DB.Where("user_id = ? AND meeting_id = ?", service.UserId, service.MeetingId).Delete(&model.Relation{}).Error; err != nil {
 		return serializer.ParamErr("删除失败", err)
 	}
 
