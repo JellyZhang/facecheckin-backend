@@ -1,7 +1,6 @@
 package model
 
 type Checktime struct {
-	CheckType string      `json:"checktype"`
 	CheckRule string      `json:"checkrule"`
 	TimeSpace interface{} `json:"timespace"`
 }

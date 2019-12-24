@@ -7,10 +7,10 @@ import (
 )
 
 type MeetingUpdateService struct {
+	UserId    string `form:"uid" json:"uid" binding:"required"`
 	MeetingId    string `form:"mid" json:"mid" binding:"required"`
 	MeetingName  string `form:"mname" json:"mname" binding:"required"`
 	MeetingCover string `form:"mcover" json:"mcover" binding:"required"`
-	CheckType    string `form:"check_type" json:"check_type" binding:"required"`
 	CheckRule    string `form:"check_rule" json:"check_rule" binding:"required"`
 	TimeStart    int `form:"check_time_start" json:"check_time_start" binding:"required"`
 	TimeEnd      int `form:"check_time_end" json:"check_time_end" binding:"required"`
@@ -26,10 +26,13 @@ func (service MeetingUpdateService) UpdateMeeting(c *gin.Context) serializer.Res
 		return serializer.ParamErr("未找到相应meeting", err)
 	}
 
+	if meeting.OwnerId != service.UserId{
+		return serializer.Err(40001,"您不是该会议的主持人",nil)
+	}
+
 	// update meeting
 	meeting.MeetingName = service.MeetingName
 	meeting.MeetingCover = service.MeetingCover
-	meeting.CheckType = service.CheckType
 	meeting.CheckRule = service.CheckRule
 	meeting.TimeStart = service.TimeStart
 	meeting.TimeEnd = service.TimeEnd

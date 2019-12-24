@@ -3,14 +3,12 @@ package service
 import (
 	"facecheckin/model"
 	"facecheckin/serializer"
-	"fmt"
 	"github.com/gin-gonic/gin"
 )
 
 type MeetingDetialService struct {
 	Meetingid string `form:"meetingid" json:"meetingid" binding:"required"`
 }
-
 func (service *MeetingDetialService) GetDetail(c *gin.Context) serializer.Response {
 	var meeting model.Meeting
 	var userList []model.User
@@ -38,7 +36,6 @@ func (service *MeetingDetialService) GetDetail(c *gin.Context) serializer.Respon
 	if err:= model.DB.Where("phone_number = ?", meeting.OwnerId).First(&owner).Error; err!=nil{
 		return serializer.ParamErr("cant find owner",err)
 	}
-	fmt.Println(owner.ID)
 
 	// build meetingDetail
 	detail := model.MeetingDetail{
@@ -51,7 +48,6 @@ func (service *MeetingDetialService) GetDetail(c *gin.Context) serializer.Respon
 			Describe:  meeting.Describe,
 		},
 		CheckTime: model.Checktime{
-			CheckType: meeting.CheckType,
 			CheckRule: meeting.CheckRule,
 			TimeSpace: model.TimeSpace{
 				TimeStart: meeting.TimeStart,

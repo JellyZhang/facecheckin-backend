@@ -16,7 +16,6 @@ type MeetingAddService struct {
 	UserId       string `form:"uid" json:"uid" binding:"required"`
 	MeetingName  string `form:"mname" json:"mname" binding:"required"`
 	MeetingCover string `form:"mcover" json:"mcover" binding:"required"`
-	CheckType    string `form:"check_type" json:"check_type" binding:"required"`
 	CheckRule    string `form:"check_rule" json:"check_rule" binding:"required"`
 	TimeStart    int `form:"check_time_start" json:"check_time_start" binding:"required"`
 	TimeEnd      int `form:"check_time_end" json:"check_time_end" binding:"required"`
@@ -84,7 +83,6 @@ func (service MeetingAddService) AddMeeting(c *gin.Context) serializer.Response 
 		LocationLatitude:  service.Latitude,
 		LocationLongitude: service.Longitude,
 		Describe:          service.Describe,
-		CheckType:         service.CheckType,
 		CheckRule:         service.CheckRule,
 		TimeStart:         service.TimeStart,
 		TimeEnd:           service.TimeEnd,

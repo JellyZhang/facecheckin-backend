@@ -10,7 +10,6 @@ type Meeting struct {
 	LocationLatitude  string
 	LocationLongitude string
 	Describe          string
-	CheckType         string
 	CheckRule         string
 	TimeStart         int
 	TimeEnd           int
