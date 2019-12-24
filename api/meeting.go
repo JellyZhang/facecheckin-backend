@@ -63,3 +63,12 @@ func MeetingList(c *gin.Context) {
 		c.JSON(200, ErrorResponse(err))
 	}
 }
+func MeetingDelete(c *gin.Context) {
+	var service service.MeetingDeleteService
+	if err := c.ShouldBind(&service); err == nil {
+		res := service.Delete(c)
+		c.JSON(200, res)
+	} else {
+		c.JSON(200, ErrorResponse(err))
+	}
+}

@@ -43,11 +43,11 @@ func (service CheckstatisticService) GetStatic(c *gin.Context) serializer.Respon
 	var relations []model.Relation
 	var personal []model.DayStatistic
 	var group []model.DayStatistic
-	if err := model.DB.Where("meeting_id = ?", service.MeetingId).Find(&relations).Error; err != nil {
-		return serializer.ParamErr("查询用户组出错", err)
+	if err := model.DB.Where("meeting_id = ? AND type = 0", service.MeetingId).Find(&relations).Error; err != nil {
+		return serializer.ParamErr("查询用户出错", err)
 	}
 	for _, v := range relations {
-		temp := getonesstatic(v.UserId, v.MeetingId)
+		temp := getonesstatic(v.UserId, v.MeetingId, v.CreatedAt)
 		group = append(group, temp...)
 		if v.UserId == service.UserId {
 			personal = temp
@@ -60,7 +60,8 @@ func (service CheckstatisticService) GetStatic(c *gin.Context) serializer.Respon
 	return serializer.BuildCheckStatisticResponse(checkstatic)
 }
 
-func getonesstatic(userid string, meetingid string) []model.DayStatistic {
+
+func getonesstatic(userid string, meetingid string, jointime time.Time) []model.DayStatistic {
 	var mainUser model.User
 	var mainMeeting model.Meeting
 	model.DB.Where("phone_number = ?", userid).First(&mainUser)
@@ -68,7 +69,6 @@ func getonesstatic(userid string, meetingid string) []model.DayStatistic {
 
 	var personal []model.DayStatistic
 
-	meetingCreateTime := mainMeeting.CreatedAt
 	now := time.Now().AddDate(0, 0, 1)
 	weeks := strings.Split(mainMeeting.CheckRule, "_")
 	w := make(map[int]int)
@@ -79,7 +79,7 @@ func getonesstatic(userid string, meetingid string) []model.DayStatistic {
 	for i := 0; i < Duration; i++ {
 		now = now.AddDate(0, 0, -1)
 		fmt.Println(now)
-		if now.Before(meetingCreateTime) {
+		if now.Before(jointime) {
 			break
 		}
 		if _, ok := w[int(now.Weekday())]; !ok {
