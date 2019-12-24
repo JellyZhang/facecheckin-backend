@@ -2,7 +2,6 @@ package serializer
 
 import (
 	"facecheckin/model"
-	"fmt"
 )
 
 type Checktime struct {
@@ -11,8 +10,8 @@ type Checktime struct {
 }
 
 type TimeSpace struct {
-	TimeStart string `json:"start"`
-	TimeEnd   string `json:"end"`
+	TimeStart int `json:"start"`
+	TimeEnd   int `json:"end"`
 }
 type MeetingLocation struct {
 	Longitude string `json:"longitude"`
@@ -91,7 +90,6 @@ const defaultFace = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAASABIAAD/4QB+RXhp
 //}
 
 func BuildMeetingDetailResponse(detail model.MeetingDetail) Response {
-	fmt.Println("!!!!!" + detail.Owner.UserName)
 	var newmemberlist []Thisuser
 	for _, v := range detail.MemberList {
 		member := Thisuser{

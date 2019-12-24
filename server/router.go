@@ -56,6 +56,9 @@ func NewRouter() *gin.Engine {
 
 		// get face score
 		v1.POST("check/face", api.CheckFace)
+
+		// meeting list
+		v1.GET("meeting/list", api.MeetingList)
 		// 需要登录保护的
 		//auth := v1.Group("")
 		//auth.Use(middleware.AuthRequired())

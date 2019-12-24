@@ -1,3 +1,4 @@
-sudo docker login --username=zhangjelly0405@163.com registry.cn-beijing.aliyuncs.com (! 先输入系统的root密码再输入阿里云密码）
-docker build -t registry.cn-beijing.aliyuncs.com/jellyrepo/facecheckin:0.6 ./
-docker push registry.cn-beijing.aliyuncs.com/jellyrepo/facecheckin:0.6
+sudo docker login --username=zhangjelly0405@163.com registry.cn-beijing.aliyuncs.com
+(! 先输入系统的root密码再输入阿里云密码）
+docker build -t registry.cn-beijing.aliyuncs.com/jellyrepo/facecheckin:0.7 ./
+docker push registry.cn-beijing.aliyuncs.com/jellyrepo/facecheckin:0.7
