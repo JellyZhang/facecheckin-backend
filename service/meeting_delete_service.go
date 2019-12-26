@@ -10,6 +10,7 @@ type MeetingDeleteService struct {
 	MeetingId string `form:"meetingid" json:"meetingid" binding:"required"`
 	UserId    string `form:"userid" json:"userid" binding:"required"`
 }
+
 func (service *MeetingDeleteService) valid() *serializer.Response {
 	count := 0
 	model.DB.Model(&model.User{}).Where("phone_number = ?", service.UserId).Count(&count)
@@ -30,18 +31,18 @@ func (service *MeetingDeleteService) valid() *serializer.Response {
 	return nil
 
 }
-func (service MeetingDeleteService) Delete (c *gin.Context) serializer.Response {
+func (service MeetingDeleteService) Delete(c *gin.Context) serializer.Response {
 	if err := service.valid(); err != nil {
 		return *err
 	}
 
-	if err := model.DB.Where("meeting_id = ?",service.MeetingId).Delete(&model.Relation{}).Error; err != nil{
+	if err := model.DB.Where("meeting_id = ?", service.MeetingId).Delete(&model.Relation{}).Error; err != nil {
 		return serializer.Err(50000, "删除relation失败", err)
 	}
-	if err := model.DB.Where("meeting_id = ?",service.MeetingId).Delete(&model.Check{}).Error; err != nil{
+	if err := model.DB.Where("meeting_id = ?", service.MeetingId).Delete(&model.Check{}).Error; err != nil {
 		return serializer.Err(50000, "删除check失败", err)
 	}
-	if err := model.DB.Where("mid = ?",service.MeetingId).Delete(&model.Meeting{}).Error; err != nil{
+	if err := model.DB.Where("mid = ?", service.MeetingId).Delete(&model.Meeting{}).Error; err != nil {
 		return serializer.Err(50000, "删除meeting失败", err)
 	}
 

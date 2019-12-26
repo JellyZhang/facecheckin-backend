@@ -61,7 +61,7 @@ func NewRouter() *gin.Engine {
 		v1.GET("meeting/list", api.MeetingList)
 
 		// meeting delete
-		v1.POST("meeting/delete",api.MeetingDelete)
+		v1.POST("meeting/delete", api.MeetingDelete)
 		// 需要登录保护的
 		//auth := v1.Group("")
 		//auth.Use(middleware.AuthRequired())

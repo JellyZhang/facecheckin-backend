@@ -60,7 +60,6 @@ func (service CheckstatisticService) GetStatic(c *gin.Context) serializer.Respon
 	return serializer.BuildCheckStatisticResponse(checkstatic)
 }
 
-
 func getonesstatic(userid string, meetingid string, jointime time.Time) []model.DayStatistic {
 	var mainUser model.User
 	var mainMeeting model.Meeting
