@@ -4,14 +4,16 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"facecheckin/model"
 	"facecheckin/serializer"
 	"log"
 	"net/http"
+	"strings"
 )
 
 type BaiduFaceService struct {
-	FaceOne string `form:"face1" json:"face1" binding:"required"`
-	FaceTwo string `form:"face2" json:"face2" binding:"required"`
+	NewFace string `form:"face" json:"face" binding:"required"`
+	UserId string `form:"uid" json:"uid" binding:"required"`
 }
 type Body struct {
 	Image      string `json:"image"`
@@ -30,14 +32,18 @@ func (service BaiduFaceService) GetScore() serializer.Response {
 	url := "https://aip.baidubce.com/rest/2.0/face/v3/match"
 	var body []Body
 	body = append(body, Body{
-		Image:      service.FaceOne,
+		Image:      service.NewFace,
 		Image_type: "BASE64",
 	})
+	var user model.User
+	if err:= model.DB.Where("phone_number = ?", service.UserId).First(&user).Error; err!=nil{
+		return serializer.ParamErr("用户未寻到",err)
+	}
+	result := strings.Split(user.Face,",")
 	body = append(body, Body{
-		Image:      service.FaceTwo,
+		Image:      result[1],
 		Image_type: "BASE64",
 	})
-	//fmt.Println(body[0].image)
 	params := make(map[string]string)
 	params["access_token"] = "24.5941ade8867ff403fd95676a0f855bae.2592000.1578917498.282335-18025567"
 
