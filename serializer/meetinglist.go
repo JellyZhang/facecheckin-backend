@@ -9,11 +9,14 @@ type Meeting struct{
 	MeetingName string `json:"mname"`
 	MeetingId string `json:"mid"`
 	Timespace TimeSpace `json:"timespace"`
+	Sum int `json:"sum"`
 }
 
 func BuildMeetingListResponse(meetings []model.Meeting) Response{
 	var meetinglist []Meeting
 	for _,m := range meetings{
+		sum := 0
+		model.DB.Model(&model.Relation{}).Where("meeting_id = ?",m.Mid).Count(&sum)
 		newmeeting := Meeting{
 			MeetingCover: m.MeetingCover,
 			MeetingName:  m.MeetingName,
@@ -22,6 +25,7 @@ func BuildMeetingListResponse(meetings []model.Meeting) Response{
 				TimeStart: m.TimeStart,
 				TimeEnd:   m.TimeEnd,
 			},
+			Sum:sum,
 		}
 		meetinglist = append(meetinglist, newmeeting)
 	}
