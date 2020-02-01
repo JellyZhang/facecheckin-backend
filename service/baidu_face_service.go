@@ -25,7 +25,7 @@ type Response struct {
 	Result     Result `json:"result"`
 }
 type Result struct {
-	Score int `json:"score"`
+	Score float32 `json:"score"`
 }
 
 func (service BaiduFaceService) GetScore() serializer.Response {

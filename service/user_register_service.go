@@ -3,13 +3,14 @@ package service
 import (
 	"facecheckin/model"
 	"facecheckin/serializer"
+	"fmt"
 )
 
 // UserRegisterService 管理用户注册服务
 type UserRegisterService struct {
-	PhoneNumber  string `form:"phonenumber" json:"phonenumber" binding:"required,min=2,max=30"`
-	UserName     string `form:"username" json:"username" binding:"required,min=5,max=30"`
-	Password     string `form:"password" json:"password" binding:"required,min=8,max=40"`
+	PhoneNumber  string `form:"phonenumber" json:"phonenumber" binding:"required"`
+	UserName     string `form:"username" json:"username" binding:"required"`
+	Password     string `form:"password" json:"password" binding:"required"`
 	Face         string `form:"face" json:"face" binding:"required"`
 	Sex          uint8  `form:"sex" json:"sex" binding:"required"`
 	Organization string `form:"organization" json:"organization" binding:"required"`
@@ -23,15 +24,6 @@ func (service *UserRegisterService) valid() *serializer.Response {
 		return &serializer.Response{
 			Code: 40001,
 			Msg:  "手机号已注册",
-		}
-	}
-
-	count = 0
-	model.DB.Model(&model.User{}).Where("user_name = ?", service.UserName).Count(&count)
-	if count > 0 {
-		return &serializer.Response{
-			Code: 40001,
-			Msg:  "用户名已经注册",
 		}
 	}
 
@@ -59,6 +51,9 @@ func (service *UserRegisterService) Register() serializer.Response {
 	if err := service.valid(); err != nil {
 		return *err
 	}
+	fmt.Println("------------")
+	fmt.Println(service.Password)
+	fmt.Println("------------")
 
 	// 加密密码
 	if err := user.SetPassword(service.Password); err != nil {
